@@ -1,0 +1,58 @@
+<h1>www.airlines-list.com</h1>
+<style type="text/css">
+@import url("../style.css")
+</style>
+<table>
+  <tr>
+    <th>From Airport</th>
+    <th>To Airport</th>
+	<th>Start Time</th>
+	<th>Flying Time</th>
+	<th>Carrier Name</th>
+	<th>Flight Model</th>
+  </tr>
+		
+	<% @flights.each do |flight| %>
+		<tr>
+			<%= form_for :flight, url: flight_path(flight), method: :patch do |f| %>
+					<td><%= f.text_field :from, :value => flight.from %></td>
+					<td><%= f.text_field :to, :value => flight.to %></td>
+					<td><%= f.text_field :start_time, :value => flight.start_time.strftime("%H:%M") %></td>
+					<td><%= f.text_field :flying_time, :value => flight.flying_time.strftime("%H:%M") %></td>
+					<td><%= f.text_field :carrier_name, :value => flight.carrier_name %></td>
+					<td><%= f.text_field :flight_model, :value => flight.flight_model %></td>
+					<td><%= f.submit :value =>'Save'%></td>
+					<td><%= link_to '<button type="button">Delete</button>'.html_safe, flight_path(flight), method: :delete %></td>
+			<%end%>
+		</tr>
+	<% end %>
+
+	<%= form_for :flight, url: flights_path  do |f| %>
+		<tr>
+			<td><%= f.text_field :from %></td>
+			<td><%= f.text_field :to %></td>
+			<td><%= f.time_select :start_time, :selected => Time.now %></td>
+			<td><%= f.time_select :flying_time %></td>
+			<td><%= f.text_field :carrier_name %></td>
+			<td><%= f.text_field :flight_model %></td>
+			<td><%= f.submit :value =>"Add"%></td>
+		</tr>
+	<% end %>
+</table>
+
+<table>		
+	<tr>
+		<td>
+			<% if @flight.errors.any? %>
+				<div id="error_explanation">
+					<h2><%= pluralize(@flight.errors.count, "error") %> prohibited this flight from being saved:</h2>
+					<ul>
+						<% @flight.errors.full_messages.each do |msg| %>
+						<li><%= msg %></li>
+						<% end %>
+					</ul>
+				</div>
+			<% end %>
+		</td>
+	</tr>
+</table>
